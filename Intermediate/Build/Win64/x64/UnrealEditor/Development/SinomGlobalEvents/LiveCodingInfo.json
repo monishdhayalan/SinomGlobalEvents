@@ -1,0 +1,11 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.SinomGlobalEvents.cpp.obj": [
+			"SinomGlobalEvents.init.gen.cpp.obj",
+			"SinomGlobalEventsSubsystem.gen.cpp.obj",
+			"SinomGlobalEvents.cpp.obj",
+			"SinomGlobalEventsSubsystem.cpp.obj"
+		]
+	}
+}
