@@ -1,4 +1,4 @@
-
+Sinom Global Events is a  powerful utility designed for managing and handling global event listeners within Unreal Engine
 
 MIT License
 
