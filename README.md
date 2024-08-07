@@ -9,7 +9,7 @@
   - Base Code
 
 #### TO-DO
-- [x] Add Custom Log Category
+- [X] Add Custom Log Category
 - [ ] Add Gameplay Debugger Support
 
 ---
