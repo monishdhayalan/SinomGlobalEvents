@@ -3,6 +3,9 @@
 
 #include "SinomGlobalEventsSubsystem.h"
 
+DEFINE_LOG_CATEGORY_STATIC(SinomGlobalEventsLog, Log, All)
+
+
 USinomGlobalEventsSubsystem::USinomGlobalEventsSubsystem() : AllEvents({})
 {
 }
@@ -23,7 +26,7 @@ void USinomGlobalEventsSubsystem::AddListener(const UObject* OwningObject, const
 	if (IsValid(OwningObject))
 	{
 		AllEvents.Add(FSinomGlobalEventsListenerDetails(OwningObject, TargetTag), Callback);
-		//TODO: add log here
+		UE_LOG(SinomGlobalEventsLog, Display, TEXT("Added %s as Listener to Tag %s"), *OwningObject->GetName(), *TargetTag.GetTagName().ToString());
 	}
 }
 
@@ -36,6 +39,7 @@ bool USinomGlobalEventsSubsystem::RemoveListener(const UObject* OwningObject, co
 		if (i.Key() == ListenerToRemove)
 		{
 			bIsSuccess = true;
+			UE_LOG(SinomGlobalEventsLog, Display, TEXT("Removed %s from Tag %s"), *OwningObject->GetName(), *TargetTag.GetTagName().ToString())
 			AllEvents.Remove(i.Key());
 			AllEvents.CompactStable();
 			AllEvents.Shrink();
@@ -64,6 +68,7 @@ bool USinomGlobalEventsSubsystem::IsListenerRegistered(const UObject* OwningObje
 
 void USinomGlobalEventsSubsystem::RemoveAllListeners()
 {
+	UE_LOG(SinomGlobalEventsLog, Display, TEXT("Removed All Listeners"));
 	AllEvents.Empty();
 	AllEvents.Compact();
 	AllEvents.Shrink();
@@ -71,6 +76,8 @@ void USinomGlobalEventsSubsystem::RemoveAllListeners()
 
 void USinomGlobalEventsSubsystem::BroadcastMessage(const FGameplayTag TargetTag, UObject* ExtraInfo)
 {
+	TArray<FSinomGlobalEventsDelegate> allCallbacks;
+
 	for (TMap<FSinomGlobalEventsListenerDetails, FSinomGlobalEventsDelegate>::TIterator i = AllEvents.CreateIterator(); i; ++i)
 	{
 		if (!i.Key().IsObjectValid())
@@ -84,7 +91,23 @@ void USinomGlobalEventsSubsystem::BroadcastMessage(const FGameplayTag TargetTag,
 		{
 			if (i.Key().GameplayTag == TargetTag)
 			{
-				i.Value().ExecuteIfBound(ExtraInfo);
+				allCallbacks.Add(i.Value());
+			}
+		}
+	}
+
+	if (allCallbacks.Num() <= 0)
+	{
+		UE_LOG(SinomGlobalEventsLog, Display, TEXT("No Listeners for Tag: %s"), *TargetTag.GetTagName().ToString())
+	}
+	else
+	{
+		UE_LOG(SinomGlobalEventsLog, Display, TEXT("Broadcasting Tag: %s"), *TargetTag.GetTagName().ToString())
+		for (FSinomGlobalEventsDelegate i : allCallbacks)
+		{
+			if (i.IsBound())
+			{
+				i.Execute(ExtraInfo);
 			}
 		}
 	}

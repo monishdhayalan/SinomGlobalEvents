@@ -1,6 +1,6 @@
 ﻿// MIT License https://github.com/monishdhayalan 
 
-#include "SinomGlobalEvents.h"
+#include "SinomGlobalEventsModule.h"
 
 #define LOCTEXT_NAMESPACE "FSinomGlobalEventsModule"
 
