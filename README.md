@@ -3,11 +3,13 @@
 ##  Sinom Global Events is a  powerful utility designed for managing and handling global event listeners within Unreal Engine
 
 #### Changelists
+- **v1.1**
+  - Added Custom Log Category
 - **v1.0**
   - Base Code
 
 #### TO-DO
-- [ ] Add Custom Log Category
+- [x] Add Custom Log Category
 - [ ] Add Gameplay Debugger Support
 
 ---
